@@ -1,0 +1,42 @@
+Q3 Strategic Planning Meeting Notes
+
+Date: July 12, 2026
+Attendees: Sarah Jenkins (VP Product), Michael Rodriguez (Lead Engineer), David Kim (UX Director), Elena Rostova (Data Science Lead), James Smith (Operations)
+
+Meeting Objectives
+The primary goal of this meeting was to align on the strategic direction for Q3, scope resources allocated to the Research Insights AI Platform, address technical debts from Q2, and set clear KPIs for engineering and product teams.
+
+Product Strategy Review
+Sarah opened the meeting with a review of Q2 performance. The alpha launch of the document processing tool was a success, but user retention dropped after week 2.
+
+Feedback Analysis: David presented findings from user interviews. Users found the initial upload process easy, but the insights generated were sometimes hallucinated or not properly cited. This is a critical user experience risk that must be addressed.
+
+Strategic Pivot: The team agreed to shift focus from speed of generation to accuracy and citation. The new mandate for Q3 is to implement a robust RAG pipeline that enforces strict grounding in the uploaded texts.
+
+Target Audience: We are doubling down on Market Researchers and UX Analysts as our primary personas. They require detailed, structured insights rather than generic summaries.
+
+Technical Implementation Plan
+Database Architecture: Elena strongly recommended moving to PostgreSQL with pgvector for scalable vector storage. Michael agreed this will require a data migration plan for existing users.
+
+Agent Framework Decision: The team debated between LangChain and LangGraph for the orchestration layer. LangGraph was chosen because the pipeline needs cyclical evaluation for retrieving chunks, checking answers, and re-retrieving if needed.
+
+Chunking Strategy: Elena pointed out that the previous 500-character chunking was losing context. The new standard will be 1000 characters with a 200-character overlap.
+
+Risk Assessment
+LLM Latency Risk: James raised concerns about OpenAI API latency and rate limits impacting user experience. The mitigation strategy involves implementing robust caching for similar queries.
+
+Processing Large Documents Risk: The current synchronous processing will not scale to enterprise workloads. Moving document processing to background Celery workers is the recommended mitigation.
+
+Data Privacy Risk: Enterprise clients are asking about data compliance and GDPR requirements. Sarah will draft an updated privacy policy confirming that uploaded documents are stored only locally and are not used to train global models.
+
+Resource Allocation
+Sprint 1 focus is entirely on database migration and new document extraction pipeline for PDFs, DOCX, and TXT files.
+Sprint 2 involves integration of the LangGraph agent and OpenAI embeddings.
+Sprint 3 covers frontend overhaul to support detailed output formats and Insight History feature.
+
+Action Items
+Sarah must finalize the Product Requirements Document for LangGraph integration by Friday.
+David will finalize frontend mockups for the Detailed Insight view and History Dashboard.
+Michael will set up an isolated testing environment with PostgreSQL and pgvector.
+Elena will run benchmarks comparing text-embedding-3-small versus text-embedding-3-large for cost-to-performance optimization.
+James will review AWS infrastructure spend and propose optimizations to offset increased API costs.

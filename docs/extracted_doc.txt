@@ -1,0 +1,63 @@
+Research Insights AI Platform
+
+1. Overview
+The Research Insights AI Platform is an end-to-end system that enables users to upload multiple research documents, ask natural language questions, and receive AI-generated insights grounded in document citations. The platform supports multi-format export, history tracking, and structured insight generation powered by a LangGraph-based AI agent.
+This document outlines system requirements, technical specifications, architecture, workflows, sprint deliverables, and acceptance criteria.
+
+
+
+2. Functional Requirements
+2.1 Document Management
+Upload multiple files (PDF, DOCX, TXT).
+Validate file type and size.
+Store documents in local.
+Track metadata: filename, size, upload date, user ownership, status (pending → processing → completed).
+Option to delete documents.
+2.2 Document Processing Pipeline
+Extract text from uploaded files using: 
+pypdf / pdfplumber for PDFs
+python-docx for Word files
+plain-text parsing for TXT
+Chunk documents (1000 chars, 200 overlap).
+Generate embeddings using Claude/OpenAI embedding models.
+Store chunks and vectors in PostgreSQL with pgvector.
+Background processing job.
+2.3 RAG-Based Insight Generation
+Retrieve top-K relevant chunks using vector similarity search.
+Use LangGraph agent pipeline to orchestrate: 
+Query analysis
+Chunk retrieval
+Insight generation (structured JSON output)
+Citation extraction
+Output formatting
+2.4 Insight Output Formats
+Simplified – concise bullet points
+Detailed – full structured analysis: 
+Key Findings
+What Users Want
+Strategic Quick Wins
+Common Problems
+Recommended Next Steps
+Executive Summary
+2.5 Insight History
+Paginated history list.
+Filters: 
+Date range
+Format
+Search query text
+Access full past insights.
+Option to delete items.
+2.6 Export Functionality
+Export insights to: 
+DOCX (via python-docx)
+PDF (via reportlab or weasyprint)
+Include all sections + citations.
+
+
+
+
+
+
+
+
+

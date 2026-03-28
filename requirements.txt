@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-multipart
+pydantic
+langgraph
+langchain-core
+python-dotenv
+openai
+pypdf
+python-docx

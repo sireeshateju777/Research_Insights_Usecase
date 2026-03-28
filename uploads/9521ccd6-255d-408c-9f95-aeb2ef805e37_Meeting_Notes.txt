@@ -1,0 +1,44 @@
+# Q3 Strategic Planning Meeting Notes
+
+**Date**: July 12, 2026
+**Time**: 10:00 AM - 12:00 PM
+**Location**: Conference Room A / Zoom Virtual Room
+**Attendees**: Sarah Jenkins (VP Product), Michael Rodriguez (Lead Engineer), David Kim (UX Director), Elena Rostova (Data Science Lead), James Smith (Operations)
+
+## 1. Meeting Objectives
+The primary goal of this meeting was to align on the strategic direction for the upcoming quarter (Q3), definitively scope the resources allocated to the Research Insights AI Platform, address any technical debts accrued in Q2, and set clear KPIs for our engineering and product teams.
+
+## 2. Product Strategy and Roadmap Review
+Sarah opened the meeting with a review of Q2 performance. The alpha launch of our document processing tool was a success, but user retention dropped after week 2.
+- **Feedback Analysis**: David presented findings from user interviews. Users found the initial upload process easy, but the insights generated were sometimes "hallucinated" or not properly cited.
+- **Strategic Pivot**: The team agreed to shift focus from "speed of generation" to "accuracy and citation." The new mandate for Q3 is to implement a robust RAG pipeline that enforces strict grounding in the uploaded texts.
+- **Target Audience**: We are doubling down on Market Researchers and UX Analysts as our primary personas. They require detailed, structured insights rather than generic summaries.
+
+## 3. Technical Implementation Plan
+Michael discussed the necessary backend changes to support the new strategy.
+- **Database Architecture**: Elena strongly recommended moving to PostgreSQL with `pgvector`. This will allow us to store document chunks and their semantic embeddings scalably. Michael agreed and noted that this will require a data migration plan for existing users.
+- **Agent Framework**: The team debated between LangChain and LangGraph for the orchestration layer. LangGraph was chosen because our pipeline needs cyclical evaluation (e.g., retrieving chunks, checking if they answer the user's question, and retrieving again if not).
+- **Chunking Strategy**: Elena pointed out that our previous 500-character chunking was losing context. The new standard will be 1000 characters with a 200-character overlap.
+
+## 4. Work Tracking and Resource Allocation
+- **Sprint 1 (Weeks 1-2)**: Focus entirely on the database migration and the new document extraction pipeline (handling PDFs, DOCX, TXT robustly). Assigned to Backend Team (Michael, 3 engineers).
+- **Sprint 2 (Weeks 3-4)**: Integration of the LangGraph agent and OpenAI embeddings. Assigned to Data Science + Backend.
+- **Sprint 3 (Weeks 5-6)**: Frontend overhaul to support detailed output formats and the "Insight History" feature. David's team will provide the mockups by the end of Week 2.
+
+## 5. Risk Assessment and Mitigation
+- **Risk 1: LLM Latency**. James raised concerns about OpenAI API latency and rate limits impacting our user experience.
+  - *Mitigation*: We will implement robust caching for similar queries and investigate using local embedding models for the chunking process to save API calls.
+- **Risk 2: Processing Large Docs**. The current synchronous processing will not scale.
+  - *Mitigation*: We will move document processing to background Celery workers.
+- **Risk 3: Data Privacy**. Enterprise clients are asking about data compliance.
+  - *Mitigation*: Sarah will draft an updated privacy policy confirming that uploaded documents are only stored locally/on our secure VPC and are not used to train global OpenAI models.
+
+## 6. Action Items
+1. [Sarah] Finalize the Product Requirements Document (PRD) for the LangGraph integration by Friday.
+2. [David] Finalize frontend mockups for the "Detailed Insight" view and the "History Dashboard".
+3. [Michael] Set up an isolated testing environment with PostgreSQL and pgvector for Elena's team to start prototyping.
+4. [Elena] Run benchmarks on OpenAI text-embedding-3-small versus text-embedding-3-large to determine the optimal cost-to-performance ratio for our chunks.
+5. [James] Review the current AWS infrastructure spend and propose optimizations to offset the expected increase in OpenAI API costs.
+
+## 7. Next Meeting
+The next sync will be our standard Sprint Planning meeting on Monday, July 16th. Any blocking issues should be raised asynchronously via Slack before then.

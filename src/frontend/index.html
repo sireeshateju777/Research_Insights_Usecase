@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Insights AI Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="stepper">
+        <div class="step active" id="step-1"><span class="step-num">1</span> Input</div>
+        <div class="step-line"></div>
+        <div class="step" id="step-2"><span class="step-num">2</span> Processing</div>
+        <div class="step-line"></div>
+        <div class="step" id="step-3"><span class="step-num">3</span> Output</div>
+    </div>
+
+    <!-- View 1: Input -->
+    <div id="view-input" class="view active-view">
+        <div class="card main-form">
+            <h2>✨ Research Query</h2>
+            <p class="subtitle">What insights do you need?</p>
+
+            <div class="form-group">
+                <label>Select Documents *</label>
+                <p class="help-text">Choose documents from the list below or upload new documents</p>
+                <button class="upload-btn" id="upload-btn">↑ Upload New</button>
+                <input type="file" id="file-input" multiple accept=".pdf,.docx,.txt" style="display: none;">
+
+                <div class="doc-list" id="doc-list">
+                    <!-- Documents loaded dynamically from backend -->
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Research Question *</label>
+                <textarea id="research-question" rows="4" placeholder="Enter your question here..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Response Format ⓘ</label>
+                <select id="response-format">
+                    <option value="Detailed">Detailed - Comprehensive analysis with data</option>
+                    <option value="Simplified">Simplified - Concise bullet points</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Additional Context (Optional)</label>
+                <textarea id="additional-context" rows="3"></textarea>
+            </div>
+
+            <button class="generate-btn" id="generate-btn">✨ Generate Insights</button>
+            <p class="btn-help">Select at least one document and enter a research question</p>
+        </div>
+
+        <div class="card history-section">
+            <h2 class="history-title">⏱ Insight History</h2>
+            <p class="subtitle">View previous analysis</p>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Filter by Date</label>
+                    <input type="date">
+                </div>
+                <div class="filter-group">
+                    <label>Filter by Format</label>
+                    <select>
+                        <option>Executive Summary</option>
+                        <option>Detailed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="history-list">
+                <!-- History items loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- View 2: Output -->
+    <div id="view-output" class="view">
+        <div class="header-output">
+            <div class="output-title">
+                <h3 class="success-text">✔ Research Insights</h3>
+                <p>AI-generated insights from your selected documents</p>
+            </div>
+            <div class="header-actions">
+                <button class="action-btn" id="download-docx-btn">↓ Download DOCX</button>
+            </div>
+        </div>
+
+        <div class="question-box">
+            <strong>Research Question:</strong>
+            <p></p>
+        </div>
+
+        <!-- Dynamic insight sections rendered by JS -->
+        <div id="insight-sections"></div>
+
+        <div class="bottom-actions">
+            <button class="outline-btn" id="new-analysis-btn">ⓧ Start New Analysis</button>
+            <button class="solid-btn">＋ Analyze More Documents</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+# Release Notes v2.0 - Research Insights AI Platform
+
+## 1. Executive Summary
+The v2.0 release of the Research Insights AI Platform represents a significant milestone in our journey to provide cutting-edge document analysis and natural language processing capabilities. This release focuses on improving the backend architecture, introducing robust vector search capabilities, and refining the RAG (Retrieval-Augmented Generation) pipeline using the LangGraph agent framework. We have also addressed several critical bugs reported by our beta testers and optimized the frontend for a more seamless user experience.
+
+## 2. New Features and Enhancements
+
+### 2.1 Advanced Document Processing
+- **Multi-Format Support**: The platform now natively supports PDF, DOCX, and TXT files. The extraction pipeline has been completely rewritten. For PDFs, we now utilize `pdfplumber` for more accurate text extraction, especially with multi-column formats. For Word documents, `python-docx` is correctly parsing tables, headers, and footers.
+- **Intelligent Chunking**: Instead of naive character splitting, we have implemented an intelligent chunking strategy. Documents are now chunked with an average size of 1000 characters and a 200-character overlap to preserve semantic context across chunk boundaries.
+- **Background Processing**: Uploaded documents are now processed asynchronously via background workers, preventing the frontend from freezing during the ingestion of large files.
+
+### 2.2 RAG Pipeline Upgrades
+- **LangGraph Integration**: We have migrated the orchestration of our AI pipeline to LangGraph. This allows for cyclical reasoning, enabling the AI agent to recursively refine its search queries if the initial retrieval doesn't yield satisfactory answers.
+- **Vector Database**: We have transitioned from an in-memory vector store to PostgreSQL with the `pgvector` extension. This provides persistent, scalable similarity search capable of handling millions of document chunks.
+- **OpenAI Embeddings**: The system now utilizes OpenAI's latest text-embedding models, providing much richer context representations and significantly improving retrieval accuracy.
+
+### 2.3 Insight Generation and History
+- **Structured Outputs**: Users can now choose between "Simplified" (concise bullet points) and "Detailed" output formats. The detailed format enforces a strict JSON schema generation, guaranteeing sections like "Key Findings", "What Users Want", and "Strategic Quick Wins".
+- **Insight History Tracking**: All generated insights are now saved to the database. Users can view, filter (by date, format, or search text), and retrieve past insights instantly.
+- **Export Functionality**: Insights can now be exported directly to DOCX or PDF formats for easy sharing with stakeholders.
+
+## 3. Performance Improvements
+- **API Latency**: Embedding generation and database insertion have been batched, leading to a 40% reduction in processing time for large documents.
+- **Vector Search Optimization**: HNSW indexes have been applied to the `pgvector` columns, dropping the similarity search latency from ~500ms to <50ms for the average query.
+- **Frontend Rendering**: The React frontend has been optimized using memoization for complex UI components, eliminating unnecessary re-renders during document uploads.
+
+## 4. Bug Fixes
+- **Issue #104**: Fixed a bug where documents containing complex tables would cause the extraction pipeline to crash.
+- **Issue #112**: Resolved a memory leak in the asynchronous document worker queue.
+- **Issue #125**: Fixed an edge case where search queries containing special characters would fail the vector similarity search.
+- **Issue #130**: The timeline history filter now correctly applies the local time zone offset.
+
+## 5. Known Issues
+- Very large PDFs (over 100MB) may still encounter timeouts if the background worker queue is heavily congested. We suggest breaking them down into smaller files.
+- Exporting to PDF occasionally misaligns custom fonts on some Linux environments. We are working on a fix using `WeasyPrint` alternatives.
+
+## 6. Upgrade Instructions
+For self-hosted instances, please run the latest alembic migrations before starting the application, as the vector schema has significantly changed. Database backups are strongly recommended prior to upgrading.
+
+## 7. Looking Ahead
+In the upcoming minor releases, we will be introducing support for OCR to process scanned PDFs, and integration with local open-source LLMs (like Llama 3) for organizations with strict data privacy requirements.

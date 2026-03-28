@@ -1,0 +1,36 @@
+Release Notes v2.0 - Research Insights AI Platform
+
+Executive Summary
+The v2.0 release of the Research Insights AI Platform represents a significant milestone in our journey to provide cutting-edge document analysis capabilities. This release focuses on improving the backend architecture, introducing robust vector search capabilities, and refining the RAG pipeline using LangGraph.
+
+New Features and Enhancements
+
+Advanced Document Processing: The platform now natively supports PDF, DOCX, and TXT files. The extraction pipeline has been completely rewritten using pdfplumber for PDFs and python-docx for Word documents. Multi-column formats are now handled accurately.
+
+Intelligent Chunking: Documents are now chunked with an average size of 1000 characters and a 200-character overlap to preserve semantic context across chunk boundaries. This replaces the previous naive 500-character splitting.
+
+Background Processing: Uploaded documents are now processed asynchronously via background workers, preventing the frontend from freezing during ingestion of large files.
+
+LangGraph Integration: The AI pipeline has been migrated to LangGraph, enabling cyclical reasoning where the agent can recursively refine search queries if initial retrieval is unsatisfactory.
+
+Vector Database: PostgreSQL with pgvector extension now provides persistent, scalable similarity search capable of handling millions of document chunks.
+
+Structured Outputs: Users can choose between Simplified (concise bullet points) and Detailed output formats. The detailed format guarantees structured sections like Key Findings, What Users Want, and Strategic Quick Wins.
+
+Performance Improvements
+API latency reduced by 40% through batched embedding generation and database insertion.
+HNSW indexes on pgvector columns dropped similarity search latency from 500ms to under 50ms.
+Frontend rendering optimized with memoization for complex UI components.
+
+Bug Fixes
+Fixed a bug where documents containing complex tables would crash the extraction pipeline.
+Resolved a memory leak in the asynchronous document worker queue.
+Fixed search queries containing special characters failing vector similarity search.
+The timeline history filter now correctly applies the local time zone offset.
+
+Known Issues
+Very large PDFs over 100MB may encounter timeouts if the background worker queue is congested.
+Exporting to PDF occasionally misaligns custom fonts on some Linux environments.
+
+Looking Ahead
+Upcoming releases will introduce OCR support for scanned PDFs and integration with local open-source LLMs like Llama 3 for organizations with strict data privacy requirements.
